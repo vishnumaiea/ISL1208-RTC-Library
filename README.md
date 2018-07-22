@@ -1,5 +1,5 @@
 # ISL1208-RTC-Library
-An Arduino compatible library for Intersil ISL11208 real-time clock IC available in MSOP-8 package. Following are its features.
+An Arduino compatible library for Intersil ISL1208 real-time clock IC available in MSOP-8 package. Following are its features.
 - Real Time Clock/Calendar
   - Tracks Time in Hours, Minutes, and Seconds
   - Day of the Week, Day, Month, and Year

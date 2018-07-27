@@ -360,7 +360,7 @@ bool ISL1208_RTC::fetchTime() {
     Wire.write(ISL1208_SC); //time seconds register
     Wire.endTransmission();
 
-    Wire.requestFrom(ISL1208_ADDRESS,6); // now get the bytes of data...
+    Wire.requestFrom(ISL1208_ADDRESS,7); // now get the bytes of data...
 
     secondValue = Wire.read(); //read 6 bytes of data
     minuteValue = Wire.read();
@@ -368,12 +368,20 @@ bool ISL1208_RTC::fetchTime() {
     dateValue = Wire.read();
     monthValue = Wire.read();
     yearValue = Wire.read();
+    dayValue = Wire.read();
+
+    if((hourValue & B00100000) == 0) { //check HR21 bit (AM/PM)
+      periodValue = 0; //AM
+    }
+    else {
+      periodValue = 1; //PM
+    }
 
     Wire.beginTransmission(ISL1208_ADDRESS);
     Wire.write(ISL1208_SCA); //alarm seconds register
     Wire.endTransmission();
 
-    Wire.requestFrom(ISL1208_ADDRESS,5); // now get the byte of data...
+    Wire.requestFrom(ISL1208_ADDRESS,6); // now get the byte of data...
 
     //AND operation is to remove the ENABLE bit (MSB) of each register value
     secondValueAlarm = B01111111 & Wire.read();
@@ -381,9 +389,130 @@ bool ISL1208_RTC::fetchTime() {
     hourValueAlarm = B01111111 & Wire.read();
     dateValueAlarm = B01111111 & Wire.read();
     monthValueAlarm = B01111111 & Wire.read();
+    dayValueAlarm = B01111111 & Wire.read();
   }
   return true;
 }
+
+//========================================================================//
+
+int ISL1208_RTC::getHour() {
+  fetchTime();
+  return bcdToDec(hourValue & B00011111);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getMinute() {
+  fetchTime();
+  return bcdToDec(minuteValue);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getSecond() {
+  fetchTime();
+  return bcdToDec(secondValue);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getPeriod() {
+  fetchTime();
+  if((hourValue & B00100000) == 0) { //check HR21 bit (AM/PM)
+    periodValue = 0; //AM
+    return periodValue;
+  }
+  else {
+    periodValue = 1; //PM
+    return periodValue;
+  }
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getDay() {
+  fetchTime();
+  return dayValue;
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getDate() {
+  fetchTime();
+  return bcdToDec(dateValue);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getMonth() {
+  fetchTime();
+  return bcdToDec(monthValue);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getYear() {
+  fetchTime();
+  return bcdToDec(yearValue);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmHour() {
+  fetchTime();
+  return bcdToDec(hourValueAlarm & B00011111);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmMinute() {
+  fetchTime();
+  return bcdToDec(minuteValueAlarm);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmSecond() {
+  fetchTime();
+  return bcdToDec(secondValueAlarm);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmPeriod() {
+  fetchTime();
+  if((hourValueAlarm & B00100000) == 0) { //check HR21 bit (AM/PM)
+    periodValueAlarm = 0; //AM
+    return periodValueAlarm;
+  }
+  else {
+    periodValueAlarm = 1; //PM
+    return periodValueAlarm;
+  }
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmDay() {
+  fetchTime();
+  return dayValueAlarm;
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmDate() {
+  fetchTime();
+  return bcdToDec(dateValueAlarm);
+}
+
+//========================================================================//
+
+int ISL1208_RTC::getAlarmMonth() {
+  fetchTime();
+  return bcdToDec(monthValueAlarm);
+}
+
 //========================================================================//
 //converts the BCD read from RTC register to DEC for transmission
 
@@ -396,6 +525,130 @@ byte ISL1208_RTC::bcdToDec(byte val) {
 
 byte ISL1208_RTC::decToBcd(byte val) {
   return ((val/10*16) + (val%10));
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getTimeString() {
+  fetchTime();
+  String tempString = String(getHour());
+  tempString += ':';
+  tempString += String(getMinute());
+  tempString += ':';
+  tempString += String(getSecond());
+  tempString += ' ';
+  if(getPeriod() == 0) tempString += "AM";
+  else tempString += "PM";
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getDateString() {
+  fetchTime();
+  String tempString = String(getDate());
+  tempString += '-';
+  tempString += String(getMonth());
+  tempString += '-';
+  tempString += String(getYear() + 2000);
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getDayString() {
+  fetchTime();
+  String tempString;
+
+  switch(getDay()) {
+    case 0: tempString = "Sunday";
+    case 1: tempString = "Monday";
+    case 2: tempString = "Tuesday";
+    case 3: tempString = "Wednesday";
+    case 4: tempString = "Thursday";
+    case 5: tempString = "Friday";
+    case 6: tempString = "Saturday";
+  }
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getDayString(int n) {
+  fetchTime();
+  String tempString;
+
+  if(n == 3) {
+    switch(getDay()) {
+      case 0: tempString = "Sun";
+      case 1: tempString = "Mon";
+      case 2: tempString = "Tue";
+      case 3: tempString = "Wed";
+      case 4: tempString = "Thu";
+      case 5: tempString = "Fri";
+      case 6: tempString = "Sat";
+    }
+  }
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getDateDayString() {
+  fetchTime();
+  String tempString = getDateString();
+  tempString += getDayString();
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getDateDayString(int n) {
+  fetchTime();
+  String tempString = getDateString();
+  tempString += getDayString(n);
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getTimeDateString() {
+  String tempString = getTimeString();
+  tempString += ", ";
+  tempString += getDateString();
+
+  return tempString;
+}
+
+//========================================================================//
+
+String ISL1208_RTC::getTimeDateDayString() {
+  String tempString = getTimeString();
+  tempString += ", ";
+  tempString += getDateString();
+  tempString += ", ";
+  tempString += getDayString();
+
+  return tempString;
+}
+
+
+//========================================================================//
+
+String ISL1208_RTC::getTimeDateDayString(int n) {
+  String tempString = getTimeString();
+  tempString += ", ";
+  tempString += getDateString();
+  tempString += ", ";
+  tempString += getDayString(n);
+
+  return tempString;
 }
 
 //========================================================================//

@@ -82,7 +82,7 @@ byte secondValueAlarm;
 byte periodValueAlarm;
 ```
 
-All are public and so you can access them using the object.
+All are public and so you can access them using the object directly.
 
 ### Classes
 ```sh
@@ -198,7 +198,7 @@ Updates the alarm registers with a formatted string like we saw before. Format i
 7. bool fetchTime(); //reads RTC time and alarm registers and updates the variables
 ```
 
-This is function reads the RTC registers and updates all the variables including the alarm values.
+This function reads the RTC registers and updates all the variables including the alarm values.
 
 ```sh
 8. int getHour(); //returns the 12 format hour in DEC

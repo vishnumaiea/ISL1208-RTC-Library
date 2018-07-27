@@ -24,13 +24,13 @@ Link to datasheet : https://www.intersil.com/content/dam/intersil/documents/isl1
 
 # Library
 ### Details
-Library version : 1.3
-Author : Vishnu M Aiea
-Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library
-Author's website : www.vishnumaiea.in
-Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday
-Last updated : +05:30 11:06:16 PM, 27-07-2018, Friday
-License : MIT
+Library version : 1.3  
+Author : Vishnu M Aiea  
+Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library  
+Author's website : www.vishnumaiea.in  
+Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday  
+Last updated : +05:30 11:06:16 PM, 27-07-2018, Friday  
+License : MIT  
 
 ### Dependancies
 

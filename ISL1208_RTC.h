@@ -7,14 +7,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.h                                              //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.2                                                 //
+//  Library version : 1.3                                                 //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library     //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday              //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : +05:30 4:44:32 PM, 27-05-2018, Sunday            //
+//  File last modified : +05:30 11:06:16 PM, 27-07-2018, Friday           //
 //                                                                        //
 //========================================================================//
 
@@ -66,30 +66,30 @@ class ISL1208_RTC {
     bool updateAlarmTime(); //updates alarm registers from variables
     bool updateAlarmTime(String); //updates alarm registers from a formatted alarm time string
     bool fetchTime(); //reads RTC time and alarm registers and updates the variables
-    int getHour();
-    int getMinute();
-    int getSecond();
-    int getPeriod();
-    int getDate();
-    int getDay();
-    int getMonth();
-    int getYear();
+    int getHour(); //returns the 12 format hour in DEC
+    int getMinute(); //returns minutes in DEC
+    int getSecond(); //returns seconds value
+    int getPeriod(); //returns time period. 0 = AM, 1 = PM
+    int getDate(); //returns date
+    int getDay(); //returns day (0 to 6)
+    int getMonth(); //returns month (0 to 12)
+    int getYear(); //returns year (00 = 2000, 99 = 2099)
     int getAlarmHour();
     int getAlarmMinute();
     int getAlarmSecond();
-    int getAlarmPeriod();
+    int getAlarmPeriod(); //0 = AM, 1 = PM
     int getAlarmDate();
     int getAlarmDay();
     int getAlarmMonth();
-    String getTimeString();
-    String getDateString();
-    String getDayString();
-    String getDayString(int);
-    String getDateDayString();
-    String getDateDayString(int);
-    String getTimeDateString();
-    String getTimeDateDayString();
-    String getTimeDateDayString(int);
+    String getTimeString(); //returns formatted time string (hh:mm:ss pp)
+    String getDateString(); //returns formatted date string (DD-MM-YYYY)
+    String getDayString(); //returns the full name of day
+    String getDayString(int); //returns the first n chars of day string (n = 1 to 9)
+    String getDateDayString(); //returns a formatted date string with day name (DD-MM-YYYY DAY)
+    String getDateDayString(int); //returns a formatted date string with n truncated day name
+    String getTimeDateString(); //returns a formatted time date string
+    String getTimeDateDayString(); //does what it says!
+    String getTimeDateDayString(int); //returns a time, date string with n truncated day string
     String getAlarmString();
     bool printTime(); //prints time to the serial monitor
     bool printAlarmTime(); //prints the alarm time to serial monitor

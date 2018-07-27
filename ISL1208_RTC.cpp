@@ -7,14 +7,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.2                                                 //
+//  Library version : 1.3                                                 //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library     //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday              //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : +05:30 4:57:54 PM, 27-05-2018, Sunday            //
+//  File last modified : +05:30 11:06:16 PM, 27-07-2018, Friday           //
 //                                                                        //
 //========================================================================//
 

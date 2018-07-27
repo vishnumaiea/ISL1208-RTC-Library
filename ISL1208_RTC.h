@@ -22,6 +22,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#ifndef _ISL1208_RTC_H_
+#define _ISL1208_RTC_H_
+
 //========================================================================//
 
 //register addresses
@@ -50,8 +53,8 @@ class ISL1208_RTC {
   private:
 
   public:
-    byte yearValue, monthValue, dateValue, hourValue, minuteValue, secondValue, periodValue;
-    byte monthValueAlarm, dateValueAlarm, hourValueAlarm, minuteValueAlarm, secondValueAlarm, periodValueAlarm;
+    byte yearValue, monthValue, dateValue, dayValue, hourValue, minuteValue, secondValue, periodValue;
+    byte monthValueAlarm, dateValueAlarm, dayValueAlarm, hourValueAlarm, minuteValueAlarm, secondValueAlarm, periodValueAlarm;
 
     bool rtc_debug_enable; //prints errors and info to serial monitor is enabled
 
@@ -63,6 +66,31 @@ class ISL1208_RTC {
     bool updateAlarmTime(); //updates alarm registers from variables
     bool updateAlarmTime(String); //updates alarm registers from a formatted alarm time string
     bool fetchTime(); //reads RTC time and alarm registers and updates the variables
+    int getHour();
+    int getMinute();
+    int getSecond();
+    int getPeriod();
+    int getDate();
+    int getDay();
+    int getMonth();
+    int getYear();
+    int getAlarmHour();
+    int getAlarmMinute();
+    int getAlarmSecond();
+    int getAlarmPeriod();
+    int getAlarmDate();
+    int getAlarmDay();
+    int getAlarmMonth();
+    String getTimeString();
+    String getDateString();
+    String getDayString();
+    String getDayString(int);
+    String getDateDayString();
+    String getDateDayString(int);
+    String getTimeDateString();
+    String getTimeDateDayString();
+    String getTimeDateDayString(int);
+    String getAlarmString();
     bool printTime(); //prints time to the serial monitor
     bool printAlarmTime(); //prints the alarm time to serial monitor
     byte bcdToDec(byte); //converts a BCD value to DEC
@@ -70,3 +98,5 @@ class ISL1208_RTC {
 };
 
 //========================================================================//
+
+#endif //end _ISL1208_RTC_H_

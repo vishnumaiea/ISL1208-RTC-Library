@@ -1,5 +1,5 @@
 # ISL1208-RTC-Library
-An Arduino compatible library (will support ESP8266, ESP32 or pretty much any other baords with Arduino support) for Intersil ISL1208 real-time clock IC available in MSOP-8 package. Following are its features.
+An Arduino compatible library (will support ESP8266, ESP32 or pretty much any other boards with Arduino support) for Intersil ISL1208 real-time clock IC available in MSOP-8 package. Following are its features.
 - Real Time Clock/Calendar
   - Tracks Time in Hours, Minutes, and Seconds
   - Day of the Week, Day, Month, and Year
@@ -42,7 +42,7 @@ License : MIT
 
 ### Constants
 
-All the constants are defined inside the main header file. It includes the RTC's I2C address and the internal register addresses.
+All the constants are defined inside the main header file. It includes the RTC's I2C slave address and the internal register addresses.
 ```sh
 #define ISL1208_ADDRESS 0x6F  //I2C slave addess of RTC IC
 
@@ -238,7 +238,7 @@ Returns month value in DEC format.
 ```sh
 15. int getYear(); //returns year (00 = 2000, 99 = 2099)
 ```
-Returns the year value in DEC format. The RTC actually stores only the least two significant digits of the year in BCD format; from 00 to 99. So 99 can be interpreted as 1999 or 2099. Both will be right becasue the calenders will be same for both centuries. This functions interpret 00 as 2000 and 99 as  2099. I don't know why you guys want to go to the past. May be you're building a time machine or something ?
+Returns the year value in DEC format. The RTC actually stores only the two least significant digits of the year in BCD format; from 00 to 99. So 99 can be interpreted as 1999 or 2099. Both will be right becasue the calenders will be same for both centuries. This function interprets 00 as 2000 and 99 as  2099. I don't know why you guys want to go to the past. May be you're building a time machine or something ?
 
 
 ```sh

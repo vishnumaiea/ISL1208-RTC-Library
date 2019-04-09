@@ -1,5 +1,5 @@
 
-#include "../../ISL1208_RTC.h"
+#include <ISL1208_RTC.h>
 
 void setup() {
 

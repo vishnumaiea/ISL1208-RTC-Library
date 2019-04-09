@@ -1,4 +1,5 @@
 {
     "board": "arduino:sam:arduino_due_x_dbg",
-    "sketch": "Examples\\ISL1208_RTC_Test\\ISL1208_RTC_Test.ino"
+    "sketch": "Examples\\ISL1208_RTC_Test\\ISL1208_RTC_Test.ino",
+    "port": "COM2"
 }

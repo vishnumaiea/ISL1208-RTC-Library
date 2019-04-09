@@ -4,10 +4,12 @@
 ISL1208_RTC myRtc = ISL1208_RTC();
 
 void setup() {
+    Serial.begin(115200);
     myRtc.begin();
-    myRtc.isRtcActive();
+    myRtc.updateTime("T1801050835120#");
 } 
 
 void loop() {
-    myRtc.getAlarmDate();
+    myRtc.printTime();
+    delay(1000);
 }

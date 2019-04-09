@@ -22,6 +22,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#define ISL1208_RTC_DEBUG //uncomment this line to enable debug info
+
 #ifndef _ISL1208_RTC_H_
 #define _ISL1208_RTC_H_
 
@@ -55,8 +57,6 @@ class ISL1208_RTC {
   public:
     byte yearValue, monthValue, dateValue, dayValue, hourValue, minuteValue, secondValue, periodValue;
     byte monthValueAlarm, dateValueAlarm, dayValueAlarm, hourValueAlarm, minuteValueAlarm, secondValueAlarm, periodValueAlarm;
-
-    bool rtc_debug_enable; //prints errors and info to serial monitor is enabled
 
     ISL1208_RTC(); //constructor
     void begin(); //alternate initializer

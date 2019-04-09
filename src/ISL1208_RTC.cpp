@@ -37,8 +37,6 @@ ISL1208_RTC::ISL1208_RTC () {
   hourValueAlarm = 0;
   dateValueAlarm = 0;
   monthValueAlarm = 0;
-
-  rtc_debug_enable = false; //prints errors and info to serial monitor is enabled
 }
 
 //========================================================================//
@@ -58,8 +56,6 @@ void ISL1208_RTC::begin() {
   hourValueAlarm = 0;
   dateValueAlarm = 0;
   monthValueAlarm = 0;
-
-  rtc_debug_enable = false; //prints errors and info to serial monitor is enabled
 }
 
 //========================================================================//
@@ -70,15 +66,15 @@ bool ISL1208_RTC::isRtcActive() {
   byte error = Wire.endTransmission(); //read ACK
 
   if(error == 0) { //if RTC is available
-    if(rtc_debug_enable) {
+    #ifdef ISL1208_RTC_DEBUG
       Serial.println(F("RTC found on the bus."));
-    }
+    #endif
     return true;
   }
 
-  if(rtc_debug_enable) {
+  #ifdef ISL1208_RTC_DEBUG
     Serial.println(F("Couldn't find RTC."));
-  }
+  #endif
 
   return false;
 }
@@ -93,7 +89,7 @@ bool ISL1208_RTC::updateTime() {
   }
 
   else {
-    if(rtc_debug_enable) { //update time register
+    #ifdef ISL1208_RTC_DEBUG
       Serial.println();
       Serial.println(F("Time update received."));
       Serial.print(F("Date and Time is "));
@@ -112,7 +108,7 @@ bool ISL1208_RTC::updateTime() {
       Serial.print(monthValue);
       Serial.print(F("-"));
       Serial.println(yearValue);
-    }
+    #endif
 
     //write to time register
     Wire.beginTransmission(ISL1208_ADDRESS); //send the I2C address of RTC
@@ -157,11 +153,11 @@ bool ISL1208_RTC::updateTime(String timeString) {
     //Time format is : T1712241030421#
     if(timeString.charAt(0) == 'T') { //update time register
 
-      if(rtc_debug_enable) {
+      #ifdef ISL1208_RTC_DEBUG
         Serial.println();
         Serial.print(F("Time update received = "));
         Serial.println(timeString);
-      }
+      #endif
 
       timeString.remove(0,1); //remove 'T'
       timeString.remove(14); //remove delimiter '#'
@@ -174,7 +170,7 @@ bool ISL1208_RTC::updateTime(String timeString) {
       secondValue = byte((timeString.substring(10, 12)).toInt());
       periodValue = byte((timeString.substring(12)).toInt());
 
-      if(rtc_debug_enable) {
+      #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Date and Time is "));
         Serial.print(hourValue);
         Serial.print(F(":"));
@@ -191,7 +187,7 @@ bool ISL1208_RTC::updateTime(String timeString) {
         Serial.print(monthValue);
         Serial.print(F("-"));
         Serial.println(yearValue);
-      }
+      #endif
 
       //write to time register
       Wire.beginTransmission(ISL1208_ADDRESS); //send the I2C address of RTC
@@ -226,7 +222,7 @@ bool ISL1208_RTC::updateAlarmTime() {
   }
 
   else {
-    if(rtc_debug_enable) {
+    #ifdef ISL1208_RTC_DEBUG
       Serial.println();
       Serial.println(F("Alarm update received."));
       Serial.print(F("Alarm Date and Time is "));
@@ -244,7 +240,7 @@ bool ISL1208_RTC::updateAlarmTime() {
       Serial.print(F("-"));
       Serial.print(monthValueAlarm);
       Serial.println(F(" Every year"));
-    }
+    #endif
 
     //write to alarm register
     Wire.beginTransmission(ISL1208_ADDRESS);
@@ -289,11 +285,11 @@ bool ISL1208_RTC::updateAlarmTime(String alarmString) {
 
   else {
     if(alarmString.charAt(0) == 'A') { //update alarm register
-      if(rtc_debug_enable) {
+      #ifdef ISL1208_RTC_DEBUG
         Serial.println();
         Serial.print(F("Alarm update received = "));
         Serial.println(alarmString);
-      }
+      #endif
 
       alarmString.remove(0,1); //remove 'A'
       alarmString.remove(12); //remove delimiter #
@@ -305,7 +301,7 @@ bool ISL1208_RTC::updateAlarmTime(String alarmString) {
       secondValueAlarm = byte((alarmString.substring(8, 10)).toInt());
       periodValueAlarm = byte((alarmString.substring(10)).toInt());
 
-      if(rtc_debug_enable) {
+      #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Alarm Date and Time is "));
         Serial.print(hourValueAlarm);
         Serial.print(F(":"));
@@ -321,7 +317,7 @@ bool ISL1208_RTC::updateAlarmTime(String alarmString) {
         Serial.print(F("-"));
         Serial.print(monthValueAlarm);
         Serial.println(F(" Every year"));
-      }
+      #endif
 
       //write to alarm register
       Wire.beginTransmission(ISL1208_ADDRESS);

@@ -1,5 +1,5 @@
 {
-    "name": "ISL1208-RTC",
+    "name": "ISL1208-RTC-Library",
     "keywords": "i2c,wire,rtc",
     "description": "Arduino library for Intersil ISl1208 RTC chip.",
     "repository":

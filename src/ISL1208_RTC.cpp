@@ -1,4 +1,4 @@
-////
+
 //========================================================================//
 //                                                                        //
 //  ## ISL1208-RTC-Library ##                                             //
@@ -7,14 +7,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.3                                                 //
+//  Library version : 1.4                                                 //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library     //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday              //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : +05:30 11:06:16 PM, 27-07-2018, Friday           //
+//  File last modified : IST 09:56 PM 09-04-2019, Tuesday                 //
 //                                                                        //
 //========================================================================//
 
@@ -24,19 +24,6 @@
 //constructor
 
 ISL1208_RTC::ISL1208_RTC () {
-  yearValue = 0;
-  monthValue = 0;
-  dateValue = 0;
-  hourValue = 0;
-  minuteValue =  0;
-  secondValue = 0;
-  periodValue = 0;
-
-  secondValueAlarm = 0;
-  minuteValueAlarm = 0;
-  hourValueAlarm = 0;
-  dateValueAlarm = 0;
-  monthValueAlarm = 0;
 }
 
 //========================================================================//
@@ -56,6 +43,13 @@ void ISL1208_RTC::begin() {
   hourValueAlarm = 0;
   dateValueAlarm = 0;
   monthValueAlarm = 0;
+
+  //set the WRTC (Write RTC Enable Bit) bit to 1 to enable the RTC
+  //only then the RTC start counting
+  Wire.beginTransmission(ISL1208_ADDRESS);
+  Wire.write(ISL1208_SR); //status register
+  Wire.write(0x10); //enable WRTC 
+  Wire.endTransmission();
 }
 
 //========================================================================//

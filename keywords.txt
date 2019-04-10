@@ -15,8 +15,6 @@ ISL1208_RTC	KEYWORD1
 begin	KEYWORD2
 isRtcActive	KEYWORD2
 updateTime	KEYWORD2
-updateTime	KEYWORD2
-updateAlarmTime	KEYWORD2
 updateAlarmTime	KEYWORD2
 fetchTime	KEYWORD2
 getHour	KEYWORD2
@@ -37,11 +35,8 @@ getAlarmMonth	KEYWORD2
 getTimeString	KEYWORD2
 getDateString	KEYWORD2
 getDayString	KEYWORD2
-getDayString	KEYWORD2
-getDateDayString	KEYWORD2
 getDateDayString	KEYWORD2
 getTimeDateString	KEYWORD2
-getTimeDateDayString	KEYWORD2
 getTimeDateDayString	KEYWORD2
 getAlarmString	KEYWORD2
 printTime	KEYWORD2

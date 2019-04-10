@@ -7,14 +7,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.h                                              //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.3                                                 //
+//  Library version : 1.4                                                 //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library     //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday              //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : +05:30 11:06:16 PM, 27-07-2018, Friday           //
+//  File last modified : IST 09:56 PM 09-04-2019, Tuesday                 //
 //                                                                        //
 //========================================================================//
 
@@ -31,22 +31,30 @@
 
 //register addresses
 
-#define ISL1208_ADDRESS 0x6F  //I2C slave addess of RTC IC
+#define ISL1208_ADDRESS   0x6F  //I2C slave addess of RTC IC
 
-#define ISL1208_SC      0x00  //seconds register
-#define ISL1208_MN      0x01  //minutes register
-#define ISL1208_HR      0x02  //hours register
-#define ISL1208_DT      0x03  //date register
-#define ISL1208_MO      0x04  //month register
-#define ISL1208_YR      0x05  //year register
-#define ISL1208_DW      0x06  //day of the week register
+#define ISL1208_SC     0x00  //seconds register
+#define ISL1208_MN     0x01  //minutes register
+#define ISL1208_HR     0x02  //hours register
+#define ISL1208_DT     0x03  //date register
+#define ISL1208_MO     0x04  //month register
+#define ISL1208_YR     0x05  //year register
+#define ISL1208_DW     0x06  //day of the week register
 
-#define ISL1208_SCA     0x0C  //alarm seconds register
-#define ISL1208_MNA     0x0D  //alarm minutes register
-#define ISL1208_HRA     0x0E  //alarm hours register
-#define ISL1208_DTA     0x0F  //alarm date register
-#define ISL1208_MOA     0x10  //alarm month register
-#define ISL1208_DWA     0x11  //alarm day of the week register
+#define ISL1208_SR     0x07  //status register
+#define ISL1208_INT    0x08  //interrupt register
+#define ISL1208_ATR    0x0A  //analog trimming register
+#define ISL1208_DTR    0x0B  //digital trimming register
+
+#define ISL1208_SCA    0x0C  //alarm seconds register
+#define ISL1208_MNA    0x0D  //alarm minutes register
+#define ISL1208_HRA    0x0E  //alarm hours register
+#define ISL1208_DTA    0x0F  //alarm date register
+#define ISL1208_MOA    0x10  //alarm month register
+#define ISL1208_DWA    0x11  //alarm day of the week register
+
+#define ISL1208_USR1    0x12  //user memory 1
+#define ISL1208_USR2    0x13  //user memory 2
 
 //========================================================================//
 //main class

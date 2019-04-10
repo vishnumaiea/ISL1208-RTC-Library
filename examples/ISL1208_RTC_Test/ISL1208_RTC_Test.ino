@@ -5,6 +5,7 @@ ISL1208_RTC myRtc = ISL1208_RTC();
 
 void setup() {
     Serial.begin(115200);
+    Wire.begin();
     myRtc.begin();
     myRtc.updateTime("T1801050835120#");
 } 

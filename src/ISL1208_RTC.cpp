@@ -2,6 +2,7 @@
 //========================================================================//
 //                                                                        //
 //  ## ISL1208-RTC-Library ##                                             //
+//                                                                        //
 //  ISL1208 is an RTC from Intersil. This is an Arduino compatible        //
 //  library for ISl1208                                                   //
 //                                                                        //
@@ -9,12 +10,12 @@
 //  Description : Part of ISL1208 RTC library.                            //
 //  Library version : 1.4                                                 //
 //  Author : Vishnu M Aiea                                                //
-//  Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library     //
+//  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
-//  Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday              //
+//  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 09:56 PM 09-04-2019, Tuesday                 //
+//  File last modified : IST 10:32 AM 10-04-2019, Wednesday               //
 //                                                                        //
 //========================================================================//
 

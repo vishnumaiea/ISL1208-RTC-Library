@@ -24,12 +24,12 @@ Link to datasheet : https://www.intersil.com/content/dam/intersil/documents/isl1
 
 # Library
 ### Details
-Library version : 1.3  
+Library version : 1.4.1
 Author : Vishnu M Aiea  
-Source : https://github.com/vishnumaiea/ESP32-ILI9481-LCD-Library  
+Source : https://github.com/vishnumaiea/ISL1208-RTC-Library
 Author's website : www.vishnumaiea.in  
 Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday  
-Last updated : +05:30 11:06:16 PM, 27-07-2018, Friday  
+Last updated : +05:30 01:51 PM, 10-04-2019, Wednesday
 License : MIT  
 
 ### Dependancies
@@ -54,12 +54,20 @@ All the constants are defined inside the main header file. It includes the RTC's
 #define ISL1208_YR      0x05  //year register
 #define ISL1208_DW      0x06  //day of the week register
 
+#define ISL1208_SR     0x07  //status register
+#define ISL1208_INT    0x08  //interrupt register
+#define ISL1208_ATR    0x0A  //analog trimming register
+#define ISL1208_DTR    0x0B  //digital trimming register
+
 #define ISL1208_SCA     0x0C  //alarm seconds register
 #define ISL1208_MNA     0x0D  //alarm minutes register
 #define ISL1208_HRA     0x0E  //alarm hours register
 #define ISL1208_DTA     0x0F  //alarm date register
 #define ISL1208_MOA     0x10  //alarm month register
 #define ISL1208_DWA     0x11  //alarm day of the week register
+
+#define ISL1208_USR1    0x12  //user memory 1
+#define ISL1208_USR2    0x13  //user memory 2
 ```
 
 ### Variables
@@ -97,9 +105,9 @@ ISL1208_RTC(); //constructor
 void begin(); //alternate initializer
 bool isRtcActive(); //checks if the RTC is available on the I2C bus
 bool updateTime(); //update time registers from variables
-bool updateTime(String); //updates time registers from a formatted time string
+bool setTime(String); //updates time registers from a formatted time string
 bool updateAlarmTime(); //updates alarm registers from variables
-bool updateAlarmTime(String); //updates alarm registers from a formatted alarm time string
+bool setAlarmTime(String); //updates alarm registers from a formatted alarm time string
 bool fetchTime(); //reads RTC time and alarm registers and updates the variables
 int getHour(); //returns the 12 format hour in DEC
 int getMinute(); //returns minutes in DEC
@@ -148,7 +156,7 @@ This checks if the RTC is available on the I2C bus by reading the ACK signal.
 This updates the RTC time registers with the values present on the time variables available in the class. So if you want to set time, first save the values to the variables and then call this function.
 
 ```sh
-4. bool updateTime(String); //updates time registers from a formatted time string
+4. bool setTime(String); //updates time registers from a formatted time string
 ```
 This updates the time from a single formatted time string. Useful updating the time in a single command, for example from serial monitor.
 ``` TYYMMDDhhmmssp# ``` is the format for time string, where,
@@ -180,7 +188,7 @@ For example, to set the time and date "08:35:12 AM, 05-01-2018", we should send:
 Updates the alarm registers with the variable values.
 
 ```sh
-6. bool updateAlarmTime(String); //updates alarm registers from a formatted alarm time string
+6. bool setAlarmTime(String); //updates alarm registers from a formatted alarm time string
 ```
 
 Updates the alarm registers with a formatted string like we saw before. Format is ``` AMMDDhhmmssp# ``` where,

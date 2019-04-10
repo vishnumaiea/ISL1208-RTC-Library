@@ -8,7 +8,7 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.h                                              //
 //  Description : Header file for ISL1208_RTC library.                    //
-//  Library version : 1.4                                                 //
+//  Library version : 1.4.1                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
@@ -71,9 +71,9 @@ class ISL1208_RTC {
     void begin(); //alternate initializer
     bool isRtcActive(); //checks if the RTC is available on the I2C bus
     bool updateTime(); //update time registers from variables
-    bool updateTime(String); //updates time registers from a formatted time string
+    bool setTime(String); //updates time registers from a formatted time string
     bool updateAlarmTime(); //updates alarm registers from variables
-    bool updateAlarmTime(String); //updates alarm registers from a formatted alarm time string
+    bool setAlarmTime(String); //updates alarm registers from a formatted alarm time string
     bool fetchTime(); //reads RTC time and alarm registers and updates the variables
     int getHour(); //returns the 12 format hour in DEC
     int getMinute(); //returns minutes in DEC

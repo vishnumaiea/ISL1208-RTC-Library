@@ -8,7 +8,7 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4                                                 //
+//  Library version : 1.4.1                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
@@ -62,7 +62,7 @@ bool ISL1208_RTC::isRtcActive() {
 
   if(error == 0) { //if RTC is available
     #ifdef ISL1208_RTC_DEBUG
-      Serial.println(F("RTC found on the bus."));
+      // Serial.println(F("RTC found on the bus."));
     #endif
     return true;
   }
@@ -130,7 +130,7 @@ bool ISL1208_RTC::updateTime() {
 //generate a time string and call this function. Helpful when updating time
 //over serial console.
 
-bool ISL1208_RTC::updateTime(String timeString) {
+bool ISL1208_RTC::setTime(String timeString) {
   if(!isRtcActive()) {
     return false;
   }
@@ -263,7 +263,7 @@ bool ISL1208_RTC::updateAlarmTime() {
 //generate a alarm time string and call this function. Helpful when updating
 //time over serial console.
 
-bool ISL1208_RTC::updateAlarmTime(String alarmString) {
+bool ISL1208_RTC::setAlarmTime(String alarmString) {
   if(!isRtcActive()) {
     return false;
   }

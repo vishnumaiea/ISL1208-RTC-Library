@@ -4,18 +4,18 @@
 //  ## ISL1208-RTC-Library ##                                             //
 //                                                                        //
 //  ISL1208 is an RTC from Intersil. This is an Arduino compatible        //
-//  library for ISl1208                                                   //
+//  library for ISL1208                                                   //
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4.1                                               //
+//  Library version : 1.4.2                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 10:32 AM 10-04-2019, Wednesday               //
+//  File last modified : IST 11:06 AM 25-05-2019, Saturday                //
 //                                                                        //
 //========================================================================//
 
@@ -592,6 +592,7 @@ String ISL1208_RTC::getDayString(int n) {
 String ISL1208_RTC::getDateDayString() {
   fetchTime();
   String tempString = getDateString();
+  tempString += ", ";
   tempString += getDayString();
 
   return tempString;
@@ -602,6 +603,7 @@ String ISL1208_RTC::getDateDayString() {
 String ISL1208_RTC::getDateDayString(int n) {
   fetchTime();
   String tempString = getDateString();
+  tempString += ", ";
   tempString += getDayString(n);
 
   return tempString;

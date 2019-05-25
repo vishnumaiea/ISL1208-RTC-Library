@@ -4,18 +4,18 @@
 //  ## ISL1208-RTC-Library Arduino Example ##                             //
 //                                                                        //
 //  ISL1208 is an RTC from Intersil. This is an Arduino compatible        //
-//  library for ISl1208                                                   //
+//  library for ISL1208                                                   //
 //                                                                        //
 //  Filename : ISL1208_RTC_Test.ino                                       //
 //  Description : Example Arduino sketch.                                 //
-//  Library version : 1.4.1                                               //
+//  Library version : 1.4.2                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 01:50 PM 10-04-2019, Wednesday               //
+//  File last modified : IST 11:06 AM 25-05-2019, Saturday                //
 //                                                                        //
 //========================================================================//
 
@@ -33,8 +33,8 @@ void setup() {
   // myRtc.updateTime("T1801050835120#");  //send the time update string
   Serial.println();
   Serial.println("## ISL1208 RTC Example ##");
-  Serial.println("Author : Vishnu M Aiea (@vishnumaiea");
-  Serial.println("=====================");
+  Serial.println("Author : Vishnu M Aiea (@vishnumaiea)");
+  Serial.println("=====================================");
   Serial.println();
 
   if(myRtc.isRtcActive()) {
@@ -63,9 +63,10 @@ void loop() {
     Serial.println(inputString);
 
     //-------------------------------------------------------------------------//
+    //the follwing loop extracts the commands and parameters separated by whitespace
 
-    uint8_t posCount = 0;
-    int indexOfSpace = 0;
+    uint8_t posCount = 0;  //the position token of each whitespace
+    int indexOfSpace = 0;  //locations of the whitespaces
 
     while(inputString.indexOf(" ") != -1) { //loop until all whitespace chars are found
       indexOfSpace = inputString.indexOf(" ");  //get the position of first whitespace
@@ -83,8 +84,8 @@ void loop() {
       }
     }
 
-    //saves the last part of the string is no more whitespace is found
-    if(posCount == 0) //if there's just the command
+    //saves the last part of the string if no more whitespace is found
+    if(posCount == 0) //means there's just the command
       commandString = inputString;
     if(posCount == 1)
       firstParam = inputString;
@@ -99,12 +100,12 @@ void loop() {
     Serial.print("Command string = ");
     Serial.println(commandString);
 
-    if(firstParam.length() > 0) {
+    if(firstParam.length() > 0) {  //only print if there's a valid first parameter
       Serial.print("First param = ");
       Serial.println(firstParam);
     }
 
-    if(secondParam.length() > 0) {
+    if(secondParam.length() > 0) {  //same for other parameters
       Serial.print("Second param = ");
       Serial.println(secondParam);
     }

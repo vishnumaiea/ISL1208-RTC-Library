@@ -24,12 +24,12 @@ Link to datasheet : https://www.intersil.com/content/dam/intersil/documents/isl1
 
 # Library
 ### Details
-Library version : 1.4.1  
+Library version : 1.4.2  
 Author : Vishnu M Aiea  
 Source : https://github.com/vishnumaiea/ISL1208-RTC-Library  
 Author's website : www.vishnumaiea.in  
-Initial release : +05:30 11:49:42 AM, 27-05-2018, Sunday  
-Last updated : +05:30 01:51 PM, 10-04-2019, Wednesday  
+Initial release : IST 11:49:42 AM, 27-05-2018, Sunday  
+Last updated : IST 11:06 AM 25-05-2019, Saturday  
 License : MIT  
 
 ### Dependancies

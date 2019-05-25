@@ -1,7 +1,7 @@
 {
     "name": "ISL1208-RTC-Library",
     "keywords": "i2c,wire,rtc",
-    "description": "Arduino library for Intersil ISl1208 RTC chip.",
+    "description": "Arduino library for interfacing Intersil ISl1208 Real-Time Clock chip.",
     "repository":
     {
         "type": "git",
@@ -13,7 +13,7 @@
         "url": "https://github.com/vishnumaiea",
         "maintainer": true
     },
-    "version": "1.4.1",
+    "version": "1.4.2",
     "license": "MIT",
     "frameworks": "arduino",
     "platforms": "*"

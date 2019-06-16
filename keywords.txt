@@ -15,7 +15,9 @@ ISL1208_RTC	KEYWORD1
 begin	KEYWORD2
 isRtcActive	KEYWORD2
 updateTime	KEYWORD2
+setTime KEYWORD2
 updateAlarmTime	KEYWORD2
+setAlarmTime KEYWORD2
 fetchTime	KEYWORD2
 getHour	KEYWORD2
 getMinute	KEYWORD2

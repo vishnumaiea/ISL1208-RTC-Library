@@ -8,14 +8,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4.3                                               //
+//  Library version : 1.4.4                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 08:57 PM 19-10-2019, Saturday                //
+//  File last modified : IST 11:36 PM 19-10-2019, Saturday                //
 //                                                                        //
 //========================================================================//
 
@@ -103,8 +103,8 @@ bool ISL1208_RTC::updateTime() {
       Serial.print(F("-"));
       Serial.print(monthValue);
       Serial.print(F("-"));
-      Serial.println(yearValue);
-      Serial.println(F(", "));
+      Serial.print(yearValue);
+      Serial.print(F(", "));
       Serial.println(dayValue);
     #endif
 
@@ -186,8 +186,8 @@ bool ISL1208_RTC::setTime(String timeString) {
         Serial.print(F("-"));
         Serial.print(monthValue);
         Serial.print(F("-"));
-        Serial.println(yearValue);
-        Serial.println(F(", "));
+        Serial.print(yearValue);
+        Serial.print(F(", "));
         Serial.println(dayValue);
       #endif
 

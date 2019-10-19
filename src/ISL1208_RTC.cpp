@@ -8,14 +8,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4.2                                               //
+//  Library version : 1.4.3                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 11:06 AM 25-05-2019, Saturday                //
+//  File last modified : IST 08:57 PM 19-10-2019, Saturday                //
 //                                                                        //
 //========================================================================//
 
@@ -34,6 +34,7 @@ void ISL1208_RTC::begin() {
   yearValue = 0;
   monthValue = 0;
   dateValue = 0;
+  dayValue = 0;
   hourValue = 0;
   minuteValue =  0;
   secondValue = 0;
@@ -86,7 +87,7 @@ bool ISL1208_RTC::updateTime() {
   else {
     #ifdef ISL1208_RTC_DEBUG
       Serial.println();
-      Serial.println(F("Time update received."));
+      Serial.println(F("Updating time from saved values.."));
       Serial.print(F("Date and Time is "));
       Serial.print(hourValue);
       Serial.print(F(":"));
@@ -103,6 +104,8 @@ bool ISL1208_RTC::updateTime() {
       Serial.print(monthValue);
       Serial.print(F("-"));
       Serial.println(yearValue);
+      Serial.println(F(", "));
+      Serial.println(dayValue);
     #endif
 
     //write to time register
@@ -119,6 +122,7 @@ bool ISL1208_RTC::updateTime() {
     Wire.write(decToBcd(dateValue));
     Wire.write(decToBcd(monthValue));
     Wire.write(decToBcd(yearValue));
+    Wire.write(decToBcd(dayValue));
     Wire.endTransmission();
   }
 
@@ -135,7 +139,7 @@ bool ISL1208_RTC::setTime(String timeString) {
     return false;
   }
 
-  if(timeString.length() != 15) { //chek if time inputs are valid
+  if(timeString.length() != 16) { //chek if time inputs are valid
     Serial.flush();
     Serial.print(F("Invalid time input - "));
     Serial.print(timeString);
@@ -145,7 +149,7 @@ bool ISL1208_RTC::setTime(String timeString) {
   }
 
   else {
-    //Time format is : T1712241030421#
+    //Time format is : T17122410304213# (TYYMMDDhhmmsspd#)
     if(timeString.charAt(0) == 'T') { //update time register
 
       #ifdef ISL1208_RTC_DEBUG
@@ -155,7 +159,7 @@ bool ISL1208_RTC::setTime(String timeString) {
       #endif
 
       timeString.remove(0,1); //remove 'T'
-      timeString.remove(14); //remove delimiter '#'
+      timeString.remove(15); //remove delimiter '#'
 
       yearValue = byte((timeString.substring(0, 2)).toInt()); //convert string values to decimals
       monthValue = byte((timeString.substring(2, 4)).toInt());
@@ -163,7 +167,8 @@ bool ISL1208_RTC::setTime(String timeString) {
       hourValue = byte((timeString.substring(6, 8)).toInt());
       minuteValue = byte((timeString.substring(8, 10)).toInt());
       secondValue = byte((timeString.substring(10, 12)).toInt());
-      periodValue = byte((timeString.substring(12)).toInt());
+      periodValue = byte((timeString.substring(12, 13)).toInt());
+      dayValue = byte((timeString.substring(13)).toInt());
 
       #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Date and Time is "));
@@ -182,6 +187,8 @@ bool ISL1208_RTC::setTime(String timeString) {
         Serial.print(monthValue);
         Serial.print(F("-"));
         Serial.println(yearValue);
+        Serial.println(F(", "));
+        Serial.println(dayValue);
       #endif
 
       //write to time register
@@ -198,6 +205,7 @@ bool ISL1208_RTC::setTime(String timeString) {
       Wire.write(decToBcd(dateValue));
       Wire.write(decToBcd(monthValue));
       Wire.write(decToBcd(yearValue));
+      Wire.write(decToBcd(dayValue));
       Wire.endTransmission();
 
       // isTimeSet = true;

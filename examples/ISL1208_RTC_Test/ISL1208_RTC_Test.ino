@@ -8,7 +8,7 @@
 //                                                                        //
 //  Filename : ISL1208_RTC_Test.ino                                       //
 //  Description : Example Arduino sketch.                                 //
-//  Library version : 1.4.4                                               //
+//  Library version : 1.4.5                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //

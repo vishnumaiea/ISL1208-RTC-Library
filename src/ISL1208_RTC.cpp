@@ -584,17 +584,10 @@ String ISL1208_RTC::getDayString() {
 String ISL1208_RTC::getDayString(int n) {
   fetchTime();
   String tempString;
-
-  if(n == 3) {
-    switch(getDay()) {
-      case 0: tempString = "Sun";
-      case 1: tempString = "Mon";
-      case 2: tempString = "Tue";
-      case 3: tempString = "Wed";
-      case 4: tempString = "Thu";
-      case 5: tempString = "Fri";
-      case 6: tempString = "Sat";
-    }
+if(n == 3) 
+  tempString.remove(n);
+  return tempString;
+  
   }
 
   return tempString;

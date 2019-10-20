@@ -8,14 +8,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4.4                                               //
+//  Library version : 1.4.5                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 11:36 PM 19-10-2019, Saturday                //
+//  File last modified : IST 07:02 AM 20-10-2019, Sunday                //
 //                                                                        //
 //========================================================================//
 

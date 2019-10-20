@@ -583,8 +583,7 @@ String ISL1208_RTC::getDayString() {
 
 String ISL1208_RTC::getDayString(int n) {
   fetchTime();
-  String tempString;
-
+  String tempString = getDayString();
   if(n == 3) {
   tempString.remove(n);
   return tempString;

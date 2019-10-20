@@ -432,7 +432,7 @@ int ISL1208_RTC::getPeriod() {
 
 int ISL1208_RTC::getDay() {
   fetchTime();
-  return dayValue;
+  return bcdToDec(dayValue);
 }
 
 //========================================================================//
@@ -561,15 +561,20 @@ String ISL1208_RTC::getDayString() {
   fetchTime();
   String tempString;
 
-  switch(getDay()) {
-    case 0: tempString = "Sunday";
-    case 1: tempString = "Monday";
-    case 2: tempString = "Tuesday";
-    case 3: tempString = "Wednesday";
-    case 4: tempString = "Thursday";
-    case 5: tempString = "Friday";
-    case 6: tempString = "Saturday";
-  }
+    if(getDay() == 0) 
+    tempString = "Sunday";
+    if(getDay() == 1)
+    tempString = "Monday";
+    if(getDay() == 2)
+    tempString = "Tuesday";
+    if(getDay() == 3)
+    tempString = "Wednesday";
+    if(getDay() == 4)
+    tempString = "Thursday";
+    if(getDay() == 5)
+    tempString = "Friday";
+    if(getDay() == 6)
+    tempString = "Saturday";
 
   return tempString;
 }

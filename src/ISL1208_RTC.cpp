@@ -565,7 +565,8 @@ String ISL1208_RTC::getDateString() {
 
   return tempString;
 }
-
+//========================================================================//
+//--------------------------Time Day--------------------------------------//
 //========================================================================//
 
 String ISL1208_RTC::getDayString() {
@@ -593,14 +594,47 @@ String ISL1208_RTC::getDayString() {
 //========================================================================//
 
 String ISL1208_RTC::getDayString(int n) {
-  fetchTime();
   String tempString = getDayString();
-  if(n == 3) 
   tempString.remove(n);
+  return tempString;
+}
+//========================================================================//
+//-----------------------AlarmTime Day------------------------------------//
+//========================================================================//
+
+String ISL1208_RTC::getAlarmDayString() {
+  fetchTime();
+  String tempString;
+
+    if(getAlarmDay() == 0) 
+    tempString = "Sunday";
+    if(getAlarmDay() == 1)
+    tempString = "Monday";
+    if(getAlarmDay() == 2)
+    tempString = "Tuesday";
+    if(getAlarmDay() == 3)
+    tempString = "Wednesday";
+    if(getAlarmDay() == 4)
+    tempString = "Thursday";
+    if(getAlarmDay() == 5)
+    tempString = "Friday";
+    if(getAlarmDay() == 6)
+    tempString = "Saturday";
+
   return tempString;
 }
 
 //========================================================================//
+
+String ISL1208_RTC::getAlarmDayString(int n) {
+  String tempString = getAlarmDayString();
+  tempString.remove(n);
+  return tempString;
+}
+//========================================================================//
+//------------------------------End---------------------------------------//
+//========================================================================//
+
 
 String ISL1208_RTC::getDateDayString() {
   fetchTime();

@@ -45,6 +45,7 @@ void ISL1208_RTC::begin() {
   hourValueAlarm = 0;
   dateValueAlarm = 0;
   monthValueAlarm = 0;
+  dayValueAlarm = 0;
 
   //set the WRTC (Write RTC Enable Bit) bit to 1 to enable the RTC
   //only then the RTC start counting
@@ -227,7 +228,7 @@ bool ISL1208_RTC::updateAlarmTime() {
   else {
     #ifdef ISL1208_RTC_DEBUG
       Serial.println();
-      Serial.println(F("Alarm update received."));
+      Serial.println(F("Updating alarm time from saved values.."));
       Serial.print(F("Alarm Date and Time is "));
       Serial.print(hourValueAlarm);
       Serial.print(F(":"));
@@ -243,6 +244,10 @@ bool ISL1208_RTC::updateAlarmTime() {
       Serial.print(F("-"));
       Serial.print(monthValueAlarm);
       Serial.println(F(" Every year"));
+      Serial.println(F(", "));
+      Serial.print(F("Day of week  "));
+      Serial.print(F(":  "));
+      Serial.println(dayValueAlarm);
     #endif
 
     //write to alarm register
@@ -258,6 +263,7 @@ bool ISL1208_RTC::updateAlarmTime() {
 
     Wire.write((B10000000 | (decToBcd(dateValueAlarm))));
     Wire.write((B10000000 | (decToBcd(monthValueAlarm))));
+    Wire.write(decToBcd(dayValueAlarm));
     Wire.endTransmission();
 
     // isAlarmSet = true;
@@ -276,8 +282,8 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
     return false;
   }
 
-  //Alarm time format is : A12241030421#
-  if(alarmString.length() != 13) { //chek if time inputs are valid
+  //Alarm time format is : A122410304215d# 
+  if(alarmString.length() != 14) { //chek if time inputs are valid
     Serial.flush();
     Serial.print(F("Invalid time input - "));
     Serial.print(alarmString);
@@ -295,15 +301,15 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
       #endif
 
       alarmString.remove(0,1); //remove 'A'
-      alarmString.remove(12); //remove delimiter #
+      alarmString.remove(14); //remove delimiter #
 
       monthValueAlarm = byte((alarmString.substring(0, 2)).toInt()); //convert string values to decimals
       dateValueAlarm = byte((alarmString.substring(2, 4)).toInt());
       hourValueAlarm = byte((alarmString.substring(4, 6)).toInt());
       minuteValueAlarm = byte((alarmString.substring(6, 8)).toInt());
       secondValueAlarm = byte((alarmString.substring(8, 10)).toInt());
-      periodValueAlarm = byte((alarmString.substring(10)).toInt());
-
+      periodValueAlarm = byte((alarmString.substring(10, 11)).toInt());
+      dayValueAlarm = byte((alarmString.substring(11)).toInt());
       #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Alarm Date and Time is "));
         Serial.print(hourValueAlarm);
@@ -320,6 +326,9 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
         Serial.print(F("-"));
         Serial.print(monthValueAlarm);
         Serial.println(F(" Every year"));
+        Serial.print(F("Day of week  "));
+        Serial.print(F(":  "));
+        Serial.println(dayValueAlarm);
       #endif
 
       //write to alarm register
@@ -335,7 +344,9 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
 
       Wire.write((B10000000 | (decToBcd(dateValueAlarm))));
       Wire.write((B10000000 | (decToBcd(monthValueAlarm))));
+      Wire.write(decToBcd(dayValueAlarm));
       Wire.endTransmission();
+    
 
       // isAlarmSet = true;
     }
@@ -495,7 +506,7 @@ int ISL1208_RTC::getAlarmPeriod() {
 
 int ISL1208_RTC::getAlarmDay() {
   fetchTime();
-  return dayValueAlarm;
+  return bcdToDec(dayValueAlarm);
 }
 
 //========================================================================//
@@ -554,7 +565,8 @@ String ISL1208_RTC::getDateString() {
 
   return tempString;
 }
-
+//========================================================================//
+//--------------------------Time Day--------------------------------------//
 //========================================================================//
 
 String ISL1208_RTC::getDayString() {
@@ -582,25 +594,47 @@ String ISL1208_RTC::getDayString() {
 //========================================================================//
 
 String ISL1208_RTC::getDayString(int n) {
+  String tempString = getDayString();
+  tempString.remove(n);
+  return tempString;
+}
+//========================================================================//
+//-----------------------AlarmTime Day------------------------------------//
+//========================================================================//
+
+String ISL1208_RTC::getAlarmDayString() {
   fetchTime();
   String tempString;
 
-  if(n == 3) {
-    switch(getDay()) {
-      case 0: tempString = "Sun";
-      case 1: tempString = "Mon";
-      case 2: tempString = "Tue";
-      case 3: tempString = "Wed";
-      case 4: tempString = "Thu";
-      case 5: tempString = "Fri";
-      case 6: tempString = "Sat";
-    }
-  }
+    if(getAlarmDay() == 0) 
+    tempString = "Sunday";
+    if(getAlarmDay() == 1)
+    tempString = "Monday";
+    if(getAlarmDay() == 2)
+    tempString = "Tuesday";
+    if(getAlarmDay() == 3)
+    tempString = "Wednesday";
+    if(getAlarmDay() == 4)
+    tempString = "Thursday";
+    if(getAlarmDay() == 5)
+    tempString = "Friday";
+    if(getAlarmDay() == 6)
+    tempString = "Saturday";
 
   return tempString;
 }
 
 //========================================================================//
+
+String ISL1208_RTC::getAlarmDayString(int n) {
+  String tempString = getAlarmDayString();
+  tempString.remove(n);
+  return tempString;
+}
+//========================================================================//
+//------------------------------End---------------------------------------//
+//========================================================================//
+
 
 String ISL1208_RTC::getDateDayString() {
   fetchTime();
@@ -724,6 +758,9 @@ bool ISL1208_RTC::printAlarmTime() {
     Serial.print('-');
     Serial.print(bcdToDec(monthValueAlarm));
     Serial.println(F(" Every year"));
+    Serial.print(F(" Day of week"));
+    Serial.print(F(" :  "));
+    Serial.println(bcdToDec(dayValueAlarm));
 
     return true;
   }

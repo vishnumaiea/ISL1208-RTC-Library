@@ -90,10 +90,13 @@ class ISL1208_RTC {
     int getAlarmDate();
     int getAlarmDay();
     int getAlarmMonth();
+    
     String getTimeString(); //returns formatted time string (hh:mm:ss pp)
     String getDateString(); //returns formatted date string (DD-MM-YYYY)
     String getDayString(); //returns the full name of day
     String getDayString(int); //returns the first n chars of day string (n = 1 to 9)
+    String getAlarmDayString(); //returns the full name of alarm day
+    String getAlarmDayString(int); //returns the first n chars of alarm day string (n = 1 to 9)
     String getDateDayString(); //returns a formatted date string with day name (DD-MM-YYYY DAY)
     String getDateDayString(int); //returns a formatted date string with n truncated day name
     String getTimeDateString(); //returns a formatted time date string

@@ -8,14 +8,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.cpp                                            //
 //  Description : Part of ISL1208 RTC library.                            //
-//  Library version : 1.4.5                                               //
+//  Library version : 1.4.6                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 07:02 AM 20-10-2019, Sunday                //
+//  File last modified : IST 09:07 PM 30-10-2019, Wednesday               //
 //                                                                        //
 //========================================================================//
 
@@ -46,6 +46,9 @@ void ISL1208_RTC::begin() {
   dateValueAlarm = 0;
   monthValueAlarm = 0;
   dayValueAlarm = 0;
+
+  startOfTheWeek = 0;
+  tempByte = 0;
 
   //set the WRTC (Write RTC Enable Bit) bit to 1 to enable the RTC
   //only then the RTC start counting
@@ -86,6 +89,15 @@ bool ISL1208_RTC::updateTime() {
   }
 
   else {
+    if((yearValue > 99) || (monthValue > 12) || (monthValue < 1) || (dateValue > 31) || (dateValue < 1) || (hourValue > 23) ||
+      (minuteValue > 59) || (secondValue > 59) || (dayValue > 6)) {
+        #ifdef ISL1208_RTC_DEBUG
+          Serial.print(F("Invalid Date and Time"));
+        #endif
+
+        return false;
+    }
+
     #ifdef ISL1208_RTC_DEBUG
       Serial.println();
       Serial.println(F("Updating time from saved values.."));
@@ -106,7 +118,40 @@ bool ISL1208_RTC::updateTime() {
       Serial.print(F("-"));
       Serial.print(yearValue);
       Serial.print(F(", "));
-      Serial.println(dayValue);
+      Serial.println(dayNamesArray[(startOfTheWeek + dayValue) % 7]);
+
+      // switch (dayValue) { //default start of week is Sunday
+      //   case 0:
+      //     Serial.println(F("Sunday"));
+      //     break;
+
+      //   case 1:
+      //     Serial.println(F("Monday"));
+      //     break;
+
+      //   case 2:
+      //     Serial.println(F("Tuesday"));
+      //     break;
+        
+      //   case 3:
+      //     Serial.println(F("Wednesday"));
+      //     break;
+        
+      //   case 4:
+      //     Serial.println(F("Thursday"));
+      //     break;
+
+      //   case 5:
+      //     Serial.println(F("Friday"));
+      //     break;
+        
+      //   case 6:
+      //     Serial.println(F("Saturday"));
+      //     break;
+        
+      //   default:
+      //     break;
+      // }
     #endif
 
     //write to time register
@@ -115,10 +160,11 @@ bool ISL1208_RTC::updateTime() {
     Wire.write(decToBcd(secondValue)); //convert the dec value to BCD ans send
     Wire.write(decToBcd(minuteValue));
 
-    hourValue = decToBcd(hourValue); //convert to BCD
-    if(periodValue == 1) hourValue |= B00100000; //if PM (1 = PM)
-    else hourValue &= B00011111; //if AM (0 = AM)
-    Wire.write(hourValue); //write the modified hour value with AM/PM
+    //make a copy of the original variable so we don't lose the DEC formatted values
+    tempByte = decToBcd(hourValue); //convert to BCD
+    if(periodValue == 1) tempByte |= B00100000; //if PM (1 = PM)
+    else tempByte &= B00011111; //if AM (0 = AM)
+    Wire.write(tempByte); //write the modified hour value with AM/PM
 
     Wire.write(decToBcd(dateValue));
     Wire.write(decToBcd(monthValue));
@@ -171,6 +217,15 @@ bool ISL1208_RTC::setTime(String timeString) {
       periodValue = byte((timeString.substring(12, 13)).toInt());
       dayValue = byte((timeString.substring(13)).toInt());
 
+      if((yearValue > 99) || (monthValue > 12) || (monthValue < 1) || (dateValue > 31) || (dateValue < 1) || (hourValue > 23) ||
+        (minuteValue > 59) || (secondValue > 59) || (dayValue > 6)) {
+          #ifdef ISL1208_RTC_DEBUG
+            Serial.print(F("Invalid Date and Time"));
+          #endif
+
+          return false;
+      }
+
       #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Date and Time is "));
         Serial.print(hourValue);
@@ -189,7 +244,7 @@ bool ISL1208_RTC::setTime(String timeString) {
         Serial.print(F("-"));
         Serial.print(yearValue);
         Serial.print(F(", "));
-        Serial.println(dayValue);
+        Serial.println(dayNamesArray[(startOfTheWeek + dayValue) % 7]);
       #endif
 
       //write to time register
@@ -226,6 +281,15 @@ bool ISL1208_RTC::updateAlarmTime() {
   }
 
   else {
+    if((monthValueAlarm > 12) || (monthValueAlarm < 1) || (dateValueAlarm > 31) || (dateValueAlarm < 1) || (hourValueAlarm > 23) ||
+      (minuteValueAlarm > 59) || (secondValueAlarm > 59) || (dayValueAlarm > 6)) {
+        #ifdef ISL1208_RTC_DEBUG
+          Serial.print(F("Invalid alarm Date and Time"));
+        #endif
+
+        return false;
+    }
+
     #ifdef ISL1208_RTC_DEBUG
       Serial.println();
       Serial.println(F("Updating alarm time from saved values.."));
@@ -247,7 +311,7 @@ bool ISL1208_RTC::updateAlarmTime() {
       Serial.println(F(", "));
       Serial.print(F("Day of week  "));
       Serial.print(F(":  "));
-      Serial.println(dayValueAlarm);
+      Serial.println(dayNamesArray[(startOfTheWeek + dayValueAlarm) % 7]);
     #endif
 
     //write to alarm register
@@ -282,8 +346,8 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
     return false;
   }
 
-  //Alarm time format is : A122410304215d# 
-  if(alarmString.length() != 14) { //chek if time inputs are valid
+  //Alarm time format is : AMMDDhhmmsspd# 
+  if(alarmString.length() != 14) { //check if time inputs are valid
     Serial.flush();
     Serial.print(F("Invalid time input - "));
     Serial.print(alarmString);
@@ -301,7 +365,7 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
       #endif
 
       alarmString.remove(0,1); //remove 'A'
-      alarmString.remove(14); //remove delimiter #
+      alarmString.remove(13); //remove delimiter #
 
       monthValueAlarm = byte((alarmString.substring(0, 2)).toInt()); //convert string values to decimals
       dateValueAlarm = byte((alarmString.substring(2, 4)).toInt());
@@ -310,6 +374,16 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
       secondValueAlarm = byte((alarmString.substring(8, 10)).toInt());
       periodValueAlarm = byte((alarmString.substring(10, 11)).toInt());
       dayValueAlarm = byte((alarmString.substring(11)).toInt());
+
+      if((monthValueAlarm > 12) || (monthValueAlarm < 1) || (dateValueAlarm > 31) || (dateValueAlarm < 1) || (hourValueAlarm > 23) ||
+        (minuteValueAlarm > 59) || (secondValueAlarm > 59) || (dayValueAlarm > 6)) {
+          #ifdef ISL1208_RTC_DEBUG
+            Serial.print(F("Invalid alarm Date and Time"));
+          #endif
+
+          return false;
+      }
+
       #ifdef ISL1208_RTC_DEBUG
         Serial.print(F("Alarm Date and Time is "));
         Serial.print(hourValueAlarm);
@@ -328,7 +402,7 @@ bool ISL1208_RTC::setAlarmTime(String alarmString) {
         Serial.println(F(" Every year"));
         Serial.print(F("Day of week  "));
         Serial.print(F(":  "));
-        Serial.println(dayValueAlarm);
+        Serial.println(dayNamesArray[(startOfTheWeek + dayValueAlarm) % 7]);
       #endif
 
       //write to alarm register
@@ -372,13 +446,9 @@ bool ISL1208_RTC::fetchTime() {
 
     Wire.requestFrom(ISL1208_ADDRESS,7); // now get the bytes of data...
 
-    secondValue = Wire.read(); //read 6 bytes of data
-    minuteValue = Wire.read();
+    secondValue = bcdToDec(Wire.read()); //read 6 bytes of data and convert them to DEC
+    minuteValue = bcdToDec(Wire.read());
     hourValue = Wire.read();
-    dateValue = Wire.read();
-    monthValue = Wire.read();
-    yearValue = Wire.read();
-    dayValue = Wire.read();
 
     if((hourValue & B00100000) == 0) { //check HR21 bit (AM/PM)
       periodValue = 0; //AM
@@ -387,6 +457,12 @@ bool ISL1208_RTC::fetchTime() {
       periodValue = 1; //PM
     }
 
+    hourValue = bcdToDec(hourValue & B00011111);
+    dateValue = bcdToDec(Wire.read());
+    monthValue = bcdToDec(Wire.read());
+    yearValue = bcdToDec(Wire.read());
+    dayValue = bcdToDec(Wire.read());
+
     Wire.beginTransmission(ISL1208_ADDRESS);
     Wire.write(ISL1208_SCA); //alarm seconds register
     Wire.endTransmission();
@@ -394,12 +470,21 @@ bool ISL1208_RTC::fetchTime() {
     Wire.requestFrom(ISL1208_ADDRESS,6); // now get the byte of data...
 
     //AND operation is to remove the ENABLE bit (MSB) of each register value
-    secondValueAlarm = B01111111 & Wire.read();
-    minuteValueAlarm = B01111111 & Wire.read();
+    secondValueAlarm = bcdToDec(B01111111 & Wire.read());
+    minuteValueAlarm = bcdToDec(B01111111 & Wire.read());
     hourValueAlarm = B01111111 & Wire.read();
-    dateValueAlarm = B01111111 & Wire.read();
-    monthValueAlarm = B01111111 & Wire.read();
-    dayValueAlarm = B01111111 & Wire.read();
+
+    if((hourValueAlarm & B00100000) == 0) { //check HR21 bit (AM/PM)
+      periodValueAlarm = 0; //AM
+    }
+    else {
+      periodValueAlarm = 1; //PM
+    }
+
+    hourValueAlarm = bcdToDec(hourValueAlarm & B00011111);
+    dateValueAlarm = bcdToDec(B01111111 & Wire.read());
+    monthValueAlarm = bcdToDec(B01111111 & Wire.read());
+    dayValueAlarm = bcdToDec(B01111111 & Wire.read());
   }
   return true;
 }
@@ -408,119 +493,105 @@ bool ISL1208_RTC::fetchTime() {
 
 int ISL1208_RTC::getHour() {
   fetchTime();
-  return bcdToDec(hourValue & B00011111);
+  return hourValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getMinute() {
   fetchTime();
-  return bcdToDec(minuteValue);
+  return minuteValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getSecond() {
   fetchTime();
-  return bcdToDec(secondValue);
+  return secondValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getPeriod() {
   fetchTime();
-  if((hourValue & B00100000) == 0) { //check HR21 bit (AM/PM)
-    periodValue = 0; //AM
-    return periodValue;
-  }
-  else {
-    periodValue = 1; //PM
-    return periodValue;
-  }
+  return periodValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getDay() {
   fetchTime();
-  return bcdToDec(dayValue);
+  return dayValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getDate() {
   fetchTime();
-  return bcdToDec(dateValue);
+  return dateValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getMonth() {
   fetchTime();
-  return bcdToDec(monthValue);
+  return monthValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getYear() {
   fetchTime();
-  return bcdToDec(yearValue);
+  return yearValue;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmHour() {
   fetchTime();
-  return bcdToDec(hourValueAlarm & B00011111);
+  return hourValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmMinute() {
   fetchTime();
-  return bcdToDec(minuteValueAlarm);
+  return minuteValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmSecond() {
   fetchTime();
-  return bcdToDec(secondValueAlarm);
+  return secondValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmPeriod() {
   fetchTime();
-  if((hourValueAlarm & B00100000) == 0) { //check HR21 bit (AM/PM)
-    periodValueAlarm = 0; //AM
-    return periodValueAlarm;
-  }
-  else {
-    periodValueAlarm = 1; //PM
-    return periodValueAlarm;
-  }
+  return periodValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmDay() {
   fetchTime();
-  return bcdToDec(dayValueAlarm);
+  return dayValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmDate() {
   fetchTime();
-  return bcdToDec(dateValueAlarm);
+  return dateValueAlarm;
 }
 
 //========================================================================//
 
 int ISL1208_RTC::getAlarmMonth() {
   fetchTime();
-  return bcdToDec(monthValueAlarm);
+  return monthValueAlarm;
 }
 
 //========================================================================//
@@ -540,7 +611,6 @@ byte ISL1208_RTC::decToBcd(byte val) {
 //========================================================================//
 
 String ISL1208_RTC::getTimeString() {
-  fetchTime();
   String tempString = String(getHour());
   tempString += ':';
   tempString += String(getMinute());
@@ -556,7 +626,6 @@ String ISL1208_RTC::getTimeString() {
 //========================================================================//
 
 String ISL1208_RTC::getDateString() {
-  fetchTime();
   String tempString = String(getDate());
   tempString += '-';
   tempString += String(getMonth());
@@ -565,30 +634,11 @@ String ISL1208_RTC::getDateString() {
 
   return tempString;
 }
-//========================================================================//
-//--------------------------Time Day--------------------------------------//
+
 //========================================================================//
 
 String ISL1208_RTC::getDayString() {
-  fetchTime();
-  String tempString;
-
-    if(getDay() == 0) 
-    tempString = "Sunday";
-    if(getDay() == 1)
-    tempString = "Monday";
-    if(getDay() == 2)
-    tempString = "Tuesday";
-    if(getDay() == 3)
-    tempString = "Wednesday";
-    if(getDay() == 4)
-    tempString = "Thursday";
-    if(getDay() == 5)
-    tempString = "Friday";
-    if(getDay() == 6)
-    tempString = "Saturday";
-
-  return tempString;
+  return dayNamesArray[(startOfTheWeek + getDay()) % 7];
 }
 
 //========================================================================//
@@ -598,30 +648,11 @@ String ISL1208_RTC::getDayString(int n) {
   tempString.remove(n);
   return tempString;
 }
-//========================================================================//
-//-----------------------AlarmTime Day------------------------------------//
+
 //========================================================================//
 
 String ISL1208_RTC::getAlarmDayString() {
-  fetchTime();
-  String tempString;
-
-    if(getAlarmDay() == 0) 
-    tempString = "Sunday";
-    if(getAlarmDay() == 1)
-    tempString = "Monday";
-    if(getAlarmDay() == 2)
-    tempString = "Tuesday";
-    if(getAlarmDay() == 3)
-    tempString = "Wednesday";
-    if(getAlarmDay() == 4)
-    tempString = "Thursday";
-    if(getAlarmDay() == 5)
-    tempString = "Friday";
-    if(getAlarmDay() == 6)
-    tempString = "Saturday";
-
-  return tempString;
+  return dayNamesArray[(startOfTheWeek + getAlarmDay()) % 7];
 }
 
 //========================================================================//
@@ -631,13 +662,10 @@ String ISL1208_RTC::getAlarmDayString(int n) {
   tempString.remove(n);
   return tempString;
 }
-//========================================================================//
-//------------------------------End---------------------------------------//
-//========================================================================//
 
+//========================================================================//
 
 String ISL1208_RTC::getDateDayString() {
-  fetchTime();
   String tempString = getDateString();
   tempString += ", ";
   tempString += getDayString();
@@ -648,7 +676,6 @@ String ISL1208_RTC::getDateDayString() {
 //========================================================================//
 
 String ISL1208_RTC::getDateDayString(int n) {
-  fetchTime();
   String tempString = getDateString();
   tempString += ", ";
   tempString += getDayString(n);
@@ -699,15 +726,14 @@ bool ISL1208_RTC::printTime() {
   if(fetchTime()) {
     Serial.println();
     Serial.print(F("Time is "));
-    Serial.print(bcdToDec(hourValue & B00011111)); //convert the read BCD to DEC
+    Serial.print(hourValue);
     Serial.print(':');
-    Serial.print(bcdToDec(minuteValue));
+    Serial.print(minuteValue);
     Serial.print(':');
-    Serial.print(bcdToDec(secondValue));
+    Serial.print(secondValue);
     Serial.print(' ');
 
-    if((hourValue & B00100000) == 0) { //check HR21 bit (AM/PM)
-      periodValue = 0;
+    if(periodValue == 0) {
       Serial.print(F("AM, "));
     }
     else {
@@ -715,17 +741,19 @@ bool ISL1208_RTC::printTime() {
       Serial.print(F("PM, "));
     }
 
-    Serial.print(bcdToDec(dateValue));
+    Serial.print(dateValue);
     Serial.print('-');
-    Serial.print(bcdToDec(monthValue));
+    Serial.print(monthValue);
     Serial.print('-');
-    Serial.println(bcdToDec(yearValue));
+    Serial.println(yearValue);
+    Serial.print(F(", "));
+    Serial.println(dayNamesArray[(startOfTheWeek + dayValue) % 7]);
 
     return true;
   }
 
   else {
-    Serial.println("Error: Could not read RTC.");
+    Serial.println(F("Error: Could not read RTC."));
   }
   return false;
 }
@@ -738,29 +766,27 @@ bool ISL1208_RTC::printAlarmTime() {
   if(fetchTime()) {
     Serial.println();
     Serial.print(F("Alarm Time is "));
-    Serial.print(bcdToDec(hourValue & B00011111));
+    Serial.print(hourValueAlarm);
     Serial.print(':');
-    Serial.print(bcdToDec(minuteValueAlarm));
+    Serial.print(minuteValueAlarm);
     Serial.print(':');
-    Serial.print(bcdToDec(secondValueAlarm));
+    Serial.print(secondValueAlarm);
     Serial.print(' ');
 
-    if((hourValueAlarm & B00100000) == 0) { //check HR21 bit (AM/PM)
-      periodValueAlarm = 0;
+    if(periodValueAlarm == 0) { //check HR21 bit (AM/PM)
       Serial.print(F("AM, "));
     }
     else {
-      periodValueAlarm = 1;
       Serial.print(F("PM, "));
     }
 
-    Serial.print(bcdToDec(dateValueAlarm));
+    Serial.print(dateValueAlarm);
     Serial.print('-');
-    Serial.print(bcdToDec(monthValueAlarm));
+    Serial.print(monthValueAlarm);
     Serial.println(F(" Every year"));
     Serial.print(F(" Day of week"));
     Serial.print(F(" :  "));
-    Serial.println(bcdToDec(dayValueAlarm));
+    Serial.println(dayNamesArray[(startOfTheWeek + dayValueAlarm) % 7]);
 
     return true;
   }

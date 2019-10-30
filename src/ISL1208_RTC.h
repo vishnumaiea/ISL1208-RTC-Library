@@ -8,14 +8,14 @@
 //                                                                        //
 //  Filename : ISL1208_RTC.h                                              //
 //  Description : Header file for ISL1208_RTC library.                    //
-//  Library version : 1.4.5                                               //
+//  Library version : 1.4.6                                               //
 //  Author : Vishnu M Aiea                                                //
 //  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
 //  Author's website : www.vishnumaiea.in                                 //
 //  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
 //  License : MIT                                                         //
 //                                                                        //
-//  File last modified : IST 09:04 PM 19-10-2019, Saturday                //
+//  File last modified : IST 09:07 PM 30-10-2019, Wednesday               //
 //                                                                        //
 //========================================================================//
 
@@ -61,11 +61,12 @@
 //main class
 
 class ISL1208_RTC {
-  private:
-
   public:
+    //all the following byte variables store in DEC format. The BCD conversion is carried out by the functions
     byte yearValue, monthValue, dateValue, dayValue, hourValue, minuteValue, secondValue, periodValue;
     byte monthValueAlarm, dateValueAlarm, dayValueAlarm, hourValueAlarm, minuteValueAlarm, secondValueAlarm, periodValueAlarm;
+    byte startOfTheWeek;
+    byte tempByte;
 
     ISL1208_RTC(); //constructor
     void begin(); //alternate initializer
@@ -81,7 +82,7 @@ class ISL1208_RTC {
     int getPeriod(); //returns time period. 0 = AM, 1 = PM
     int getDate(); //returns date
     int getDay(); //returns day (0 to 6)
-    int getMonth(); //returns month (0 to 12)
+    int getMonth(); //returns month (1 to 12)
     int getYear(); //returns year (00 = 2000, 99 = 2099)
     int getAlarmHour();
     int getAlarmMinute();
@@ -107,6 +108,9 @@ class ISL1208_RTC {
     bool printAlarmTime(); //prints the alarm time to serial monitor
     byte bcdToDec(byte); //converts a BCD value to DEC
     byte decToBcd(byte); //converts a DEC value to BCD
+
+    private:
+      String dayNamesArray[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 };
 
 //========================================================================//

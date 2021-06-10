@@ -23,4 +23,4 @@ An Arduino compatible library (will support ESP8266, ESP32 or pretty much any ot
 Link to datasheet : https://www.intersil.com/content/dam/intersil/documents/isl1/isl1208.pdf
 
 ## Tutorial
-A full tutorial of this library is available at my project website - https://www.vishnumaiea.in/projects/hardware/interfacing-intersil-isl1208-rtc-with-arduino
+A complete tutorial can be found at **CIRCUITSTATE** - https://circuitstate.com/tutorials/interfacing-intersil-isl1208-rtc-with-arduino/

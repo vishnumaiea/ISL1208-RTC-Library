@@ -30,7 +30,7 @@ void setup() {
   Serial.begin(115200);  //to print debug info
   Wire.begin();  //initialize I2C
   myRtc.begin();  //initialize RTC
-  // myRtc.updateTime("T1801050835120#");  //send the time update string
+  // myRtc.setTime("T18010508351200#");  //send the time update string
   Serial.println();
   Serial.println("## ISL1208 RTC Example ##");
   Serial.println("Author : Vishnu M Aiea (@vishnumaiea)");

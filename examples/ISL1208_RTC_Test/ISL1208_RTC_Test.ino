@@ -1,22 +1,21 @@
 
 //========================================================================//
-//                                                                        //
-//  ## ISL1208-RTC-Library Arduino Example ##                             //
-//                                                                        //
-//  ISL1208 is an RTC from Intersil. This is an Arduino compatible        //
-//  library for ISL1208                                                   //
-//                                                                        //
-//  Filename : ISL1208_RTC_Test.ino                                       //
-//  Description : Example Arduino sketch.                                 //
-//  Library version : 1.4.6                                               //
-//  Author : Vishnu M Aiea                                                //
-//  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
-//  Author's website : www.vishnumaiea.in                                 //
-//  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
-//  License : MIT                                                         //
-//                                                                        //
-//  File last modified : IST 11:06 AM 25-05-2019, Saturday                //
-//                                                                        //
+//
+//  ## ISL1208-RTC-Library Arduino Example ##
+//
+//  ISL1208 is an RTC from Intersil. This is an Arduino compatible
+//  library for ISL1208.
+//
+//  Filename: ISL1208_RTC_Test.ino
+//  Description: Example Arduino sketch to test the RTC functions.
+//  Library version: 1.4.7
+//  Author: Vishnu Mohanan (@vishnumaiea)
+//  Source: https://github.com/vishnumaiea/ISL1208-RTC-Library
+//  Initial release: IST 11:49:42 AM, 27-05-2018, Sunday
+//  License: MIT
+//
+//  File last modified: +05:30 22:08:13 PM 09-12-2021, Thursday
+//
 //========================================================================//
 
 #include <ISL1208_RTC.h>
@@ -33,11 +32,10 @@ void setup() {
   // myRtc.setTime("T18010508351200#");  //send the time update string
   Serial.println();
   Serial.println("## ISL1208 RTC Example ##");
-  Serial.println("Author : Vishnu M Aiea (@vishnumaiea)");
   Serial.println("=====================================");
   Serial.println();
 
-  if(myRtc.isRtcActive()) {
+  if (myRtc.isRtcActive()) {
     Serial.println("RTC found on the bus.");
     Serial.println();
   }
@@ -53,64 +51,64 @@ void loop() {
   String secondParam = "";
   String thirdParam = "";
 
-  //send commands and parameters for each operation
-  //items are separated by single whitespace
-  //you can send up to 3 parameters
-  if(Serial.available()) {  //monitor the serial interface
+  //send your commands and parameters from the serial monitor.
+  //all items are separated by single whitespace.
+  //you can send up to 3 parameters.
+  if (Serial.available()) {  //monitor the serial interface
     inputString = Serial.readString();  //read the contents of serial buffer as string
     Serial.println();
     Serial.print("Input String : ");
     Serial.println(inputString);
 
     //-------------------------------------------------------------------------//
-    //the follwing loop extracts the commands and parameters separated by whitespace
+    //the follwing loop extracts the commands and parameters separated by whitespace.
 
     uint8_t posCount = 0;  //the position token of each whitespace
     int indexOfSpace = 0;  //locations of the whitespaces
 
-    while(inputString.indexOf(" ") != -1) { //loop until all whitespace chars are found
+    while (inputString.indexOf(" ") != -1) { //loop until all whitespace chars are found
       indexOfSpace = inputString.indexOf(" ");  //get the position of first whitespace
-      if(indexOfSpace != -1) {  //if a whitespace is found
-        if(posCount == 0) //the first one will be command string
+      if (indexOfSpace != -1) {  //if a whitespace is found
+        if (posCount == 0) //the first one will be command string
           commandString = inputString.substring(0, indexOfSpace); //end char is exclusive
-        if(posCount == 1) //second will be second param
+        if (posCount == 1) //second will be second param
           firstParam = inputString.substring(0, indexOfSpace);
-        if(posCount == 2) //and so on
+        if (posCount == 2) //and so on
           secondParam = inputString.substring(0, indexOfSpace);
-        else if(posCount == 3)
+        else if (posCount == 3)
           thirdParam = inputString.substring(0, indexOfSpace);
         inputString = inputString.substring(indexOfSpace+1);  //trim the input string
         posCount++;
       }
     }
 
-    //saves the last part of the string if no more whitespace is found
-    if(posCount == 0) //means there's just the command
+    //saves the last part of the string if no more whitespace is found.
+    if (posCount == 0) //means there's just the command
       commandString = inputString;
-    if(posCount == 1)
+    if (posCount == 1)
       firstParam = inputString;
-    if(posCount == 2)
+    if (posCount == 2)
       secondParam = inputString;
-    if(posCount == 3)
+    if (posCount == 3)
       thirdParam = inputString;
 
     //-------------------------------------------------------------------------//
-    //separate and print the received command and parameters
+    //separate and print the received command and parameters.
 
     Serial.print("Command string = ");
     Serial.println(commandString);
 
-    if(firstParam.length() > 0) {  //only print if there's a valid first parameter
+    if (firstParam.length() > 0) {  //only print if there's a valid first parameter
       Serial.print("First param = ");
       Serial.println(firstParam);
     }
 
-    if(secondParam.length() > 0) {  //same for other parameters
+    if (secondParam.length() > 0) {  //same for other parameters
       Serial.print("Second param = ");
       Serial.println(secondParam);
     }
 
-    if(thirdParam.length() > 0) {
+    if (thirdParam.length() > 0) {
       Serial.print("Third param = ");
       Serial.println(thirdParam);
     }
@@ -120,63 +118,63 @@ void loop() {
     //-------------------------------------------------------------------------//
     //prints the time
 
-    if(commandString == "printtime") {
+    if (commandString == "printtime") {
       myRtc.printTime();
     }
 
     //-------------------------------------------------------------------------//
     //prints the alarm time
 
-    else if(commandString == "printalarmtime") {
+    else if (commandString == "printalarmtime") {
       myRtc.printAlarmTime();
     }
 
     //-------------------------------------------------------------------------//
     //send a time string to set time
 
-    else if(commandString == "settime") {
+    else if (commandString == "settime") {
       myRtc.setTime(firstParam);  //first param should be time string
     }
 
     //-------------------------------------------------------------------------//
     //send a time string to set alarm
 
-    else if(commandString == "setalarm") {
+    else if (commandString == "setalarm") {
       myRtc.setAlarmTime(firstParam);  //first param should be time string
     }
 
     //-------------------------------------------------------------------------//
     //prints formatted date
 
-    else if(commandString == "printdate") {
+    else if (commandString == "printdate") {
       Serial.println(myRtc.getDateString());
     }
 
     //-------------------------------------------------------------------------//
     //prints date and day
 
-    else if(commandString == "printdateday") {
+    else if (commandString == "printdateday") {
       Serial.println(myRtc.getDateDayString());
     }
 
     //-------------------------------------------------------------------------//
     //prints day
 
-    else if(commandString == "printday") {
+    else if (commandString == "printday") {
       Serial.println(myRtc.getDayString());
     }
 
     //-------------------------------------------------------------------------//
     //prints formatted time and date
 
-    else if(commandString == "printtimedate") {
+    else if (commandString == "printtimedate") {
       Serial.println(myRtc.getTimeDateString());
     }
 
     //-------------------------------------------------------------------------//
     //prints formatted time, data and day
 
-    else if(commandString == "printtimedateday") {
+    else if (commandString == "printtimedateday") {
       Serial.println(myRtc.getTimeDateDayString());
     }
 

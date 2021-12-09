@@ -19,6 +19,7 @@ An Arduino compatible library (will support ESP8266, ESP32 or pretty much any ot
    - 8 Ld MSOP and SOIC Packages
    - 8 Ld TDFN Package
 - Pb-Free Available (RoHS Compliant)
+- 2.5 to 5V operation
 
 Link to datasheet : https://www.intersil.com/content/dam/intersil/documents/isl1/isl1208.pdf
 

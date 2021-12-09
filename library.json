@@ -9,11 +9,11 @@
     },
     "authors":
     {
-        "name": "Vishnu M Aiea",
+        "name": "Vishnu Mohanan",
         "url": "https://github.com/vishnumaiea",
         "maintainer": true
     },
-    "version": "1.4.6",
+    "version": "1.4.7",
     "license": "MIT",
     "frameworks": "arduino",
     "platforms": "*"

@@ -1,22 +1,21 @@
 
 //========================================================================//
-//                                                                        //
-//  ## ISL1208-RTC-Library ##                                             //
-//                                                                        //
-//  ISL1208 is an RTC from Intersil. This is an Arduino compatible        //
-//  library for ISL1208                                                   //
-//                                                                        //
-//  Filename : ISL1208_RTC.h                                              //
-//  Description : Header file for ISL1208_RTC library.                    //
-//  Library version : 1.4.6                                               //
-//  Author : Vishnu M Aiea                                                //
-//  Source : https://github.com/vishnumaiea/ISL1208-RTC-Library           //
-//  Author's website : www.vishnumaiea.in                                 //
-//  Initial release : IST 11:49:42 AM, 27-05-2018, Sunday                 //
-//  License : MIT                                                         //
-//                                                                        //
-//  File last modified : IST 09:07 PM 30-10-2019, Wednesday               //
-//                                                                        //
+//
+//  ## ISL1208-RTC-Library ##
+//
+//  ISL1208 is an RTC from Intersil. This is an Arduino compatible
+//  library for ISL1208.
+//
+//  Filename: ISL1208_RTC.h
+//  Description: Header file for ISL1208_RTC library.
+//  Library version: 1.4.7
+//  Author: Vishnu Mohanan (@vishnumaiea)
+//  Source: https://github.com/vishnumaiea/ISL1208-RTC-Library
+//  Initial release: IST 11:49:42 AM, 27-05-2018, Sunday
+//  License: MIT
+//
+//  File last modified: +05:30 22:05:27 PM 09-12-2021, Thursday
+//
 //========================================================================//
 
 #include <stdint.h>
@@ -69,12 +68,12 @@ class ISL1208_RTC {
     byte tempByte;
 
     ISL1208_RTC(); //constructor
-    void begin(); //alternate initializer
+    void begin(); //initializer
     bool isRtcActive(); //checks if the RTC is available on the I2C bus
-    bool updateTime(); //update time registers from variables
-    bool setTime(String); //updates time registers from a formatted time string
+    bool updateTime(); //updates time registers from variables
+    bool setTime (String); //updates time registers from a formatted time string
     bool updateAlarmTime(); //updates alarm registers from variables
-    bool setAlarmTime(String); //updates alarm registers from a formatted alarm time string
+    bool setAlarmTime (String); //updates alarm registers from a formatted alarm time string
     bool fetchTime(); //reads RTC time and alarm registers and updates the variables
     int getHour(); //returns the 12 format hour in DEC
     int getMinute(); //returns minutes in DEC
@@ -95,19 +94,19 @@ class ISL1208_RTC {
     String getTimeString(); //returns formatted time string (hh:mm:ss pp)
     String getDateString(); //returns formatted date string (DD-MM-YYYY)
     String getDayString(); //returns the full name of day
-    String getDayString(int); //returns the first n chars of day string (n = 1 to 9)
+    String getDayString (int); //returns the first n chars of day string (n = 1 to 9)
     String getAlarmDayString(); //returns the full name of alarm day
-    String getAlarmDayString(int); //returns the first n chars of alarm day string (n = 1 to 9)
+    String getAlarmDayString (int); //returns the first n chars of alarm day string (n = 1 to 9)
     String getDateDayString(); //returns a formatted date string with day name (DD-MM-YYYY DAY)
-    String getDateDayString(int); //returns a formatted date string with n truncated day name
+    String getDateDayString (int); //returns a formatted date string with n truncated day name
     String getTimeDateString(); //returns a formatted time date string
     String getTimeDateDayString(); //does what it says!
-    String getTimeDateDayString(int); //returns a time, date string with n truncated day string
+    String getTimeDateDayString (int); //returns a time, date string with n truncated day string
     String getAlarmString();
     bool printTime(); //prints time to the serial monitor
     bool printAlarmTime(); //prints the alarm time to serial monitor
-    byte bcdToDec(byte); //converts a BCD value to DEC
-    byte decToBcd(byte); //converts a DEC value to BCD
+    byte bcdToDec (byte); //converts a BCD value to DEC
+    byte decToBcd (byte); //converts a DEC value to BCD
 
     private:
       String dayNamesArray[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
